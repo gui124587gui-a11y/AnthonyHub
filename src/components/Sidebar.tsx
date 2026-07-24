@@ -37,7 +37,6 @@ const navItems = [
   { id: 'notas', icon: FileText, label: 'Notas' },
   { id: 'agenda', icon: Calendar, label: 'Agenda' },
   { id: 'links', icon: Link, label: 'Links' },
-  { id: 'estatisticas', icon: BarChart3, label: 'Estatísticas' },
   { id: 'musica', icon: Music, label: 'Música' },
   { id: 'installer', icon: Sparkles, label: 'Instalador Mágico' },
   { id: 'uninstaller', icon: Trash2, label: 'Desinstalador' },

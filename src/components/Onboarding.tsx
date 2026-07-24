@@ -35,7 +35,7 @@ const steps = [
   {
     icon: Cpu,
     title: 'Monitor de hardware',
-    text: 'O card de “Monitor do PC” mostra o estado atual do hardware e te ajuda a entender o desempenho geral.',
+    text: 'Aqui você encontra o estado atual do hardware do PC, como CPU, RAM e disco.',
     page: 'home',
   },
   {

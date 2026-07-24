@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { 
-  Cpu, 
+  Cpu,
   MemoryStick, 
   Monitor as MonitorIcon, 
   HardDrive, 
@@ -304,59 +304,6 @@ export default function Home() {
             </div>
           </Widget>
         </div>
-        <div className="col-span-4">
-          <Widget 
-            title="Monitor do PC" 
-            icon={Cpu}
-            rightButton={<button onClick={() => setActivePage('monitor')} className="text-[10px] text-textSecondary hover:text-textPrimary font-medium">Abrir</button>}
-          >
-            <div className="grid grid-cols-2 gap-2 mb-3">
-              <div className="p-3 rounded-xl bg-card/30">
-                  <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-[10px] text-textSecondary">CPU</span>
-                  <span className="text-sm font-bold text-textPrimary">{hardware.cpu ?? '--'}%</span>
-                </div>
-                <div className="h-12">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={hardware.cpuHistory.map((v, i) => ({ x: i, y: v }))}>
-                      <Line type="monotone" dataKey="y" stroke="#3B82F6" strokeWidth={2} dot={false} />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-              <div className="p-3 rounded-xl bg-card/30">
-                  <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-[10px] text-textSecondary">RAM</span>
-                  <span className="text-sm font-bold text-textPrimary">{hardware.ram ?? '--'}%</span>
-                </div>
-                <div className="h-12">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={hardware.ramHistory.map((v, i) => ({ x: i, y: v }))}>
-                      <Line type="monotone" dataKey="y" stroke="#8B5CF6" strokeWidth={2} dot={false} />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-            </div>
-            <div className="grid grid-cols-3 gap-2">
-              <div className="p-2 rounded-xl bg-card/30 text-center">
-                <p className="text-[9px] text-textSecondary mb-0.5">GPU</p>
-                <p className="text-base font-bold text-green-400">{hardware.gpu ?? '--'}%</p>
-                <p className="text-[9px] text-textSecondary mt-0.5">{hardware.gpuModel ?? '--'}</p>
-              </div>
-              <div className="p-2 rounded-xl bg-card/30 text-center">
-                <p className="text-[9px] text-textSecondary mb-0.5">Disco</p>
-                <p className="text-base font-bold text-orange-400">{hardware.ssd ?? '--'}%</p>
-                <p className="text-[9px] text-textSecondary mt-0.5">{hardware.ssdUsed ?? '--'} / {hardware.ssdTotal ?? '--'} GB</p>
-              </div>
-              <div className="p-2 rounded-xl bg-card/30 text-center">
-                <p className="text-[9px] text-textSecondary mb-0.5">Rede</p>
-                <p className="text-base font-bold text-cyan-400">Conectado</p>
-                <p className="text-[9px] text-textSecondary mt-0.5">↑ {hardware.netUpMbs ?? '--'} ↓ {hardware.netDownMbs ?? '--'} MB/s</p>
-              </div>
-            </div>
-          </Widget>
-        </div>
       </div>
 
       {/* Linha 3 - Notas, Agenda, Estatísticas */}
@@ -397,7 +344,6 @@ export default function Home() {
           <Widget 
             title="Estatísticas" 
             icon={BarChart3}
-            rightButton={<button onClick={() => setActivePage('estatisticas')} className="text-[10px] text-textSecondary hover:text-textPrimary font-medium">Ver todos</button>}
           >
             <div className="mb-3">
               <p className="text-xl font-bold text-textPrimary mb-1">{totalUsageHours}h {totalUsageRestMinutes}m</p>

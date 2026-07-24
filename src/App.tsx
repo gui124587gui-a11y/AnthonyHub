@@ -15,7 +15,6 @@ import Notificacoes from '@/pages/Notificacoes';
 import Agenda from '@/pages/Agenda';
 import Chatbot from '@/pages/Chatbot';
 import Links from '@/pages/Links';
-import Estatisticas from '@/pages/Estatisticas';
 import Musica from '@/pages/Musica';
 import Historico from '@/pages/Historico';
 import Configuracoes from '@/pages/Configuracoes';
@@ -58,7 +57,6 @@ export default function App() {
           {activePage === 'notas' && <Notas />}
           {activePage === 'agenda' && <Agenda />}
           {activePage === 'links' && <Links />}
-          {activePage === 'estatisticas' && <Estatisticas />}
           {activePage === 'musica' && <Musica />}
           {activePage === 'historico' && <Historico />}
           {activePage === 'configuracoes' && <Configuracoes />}

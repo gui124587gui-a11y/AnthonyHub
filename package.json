@@ -1,7 +1,7 @@
 {
   "name": "anthonyhub",
   "productName": "AnthonyHub",
-  "version": "1.0.13",
+  "version": "1.0.1",
   "private": true,
   "type": "module",
   "main": "electron/main.cjs",
