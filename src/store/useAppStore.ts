@@ -82,6 +82,20 @@ export interface FavoriteItem {
   url?: string;
 }
 
+export interface NotificationSettings {
+  system: boolean;
+  agenda: boolean;
+  backup: boolean;
+  sound: boolean;
+}
+
+export interface KeyboardShortcut {
+  id: string;
+  action: string;
+  shortcut: string;
+  description: string;
+}
+
 export interface Stat {
   id: string;
   appName: string;
@@ -166,6 +180,11 @@ interface AppState {
   addHistoryItem: (item: Omit<HistoryItem, 'id' | 'timestamp'>) => void;
   removeHistoryItem: (id: string) => void;
   clearHistory: () => void;
+  language: string;
+  setLanguage: (language: string) => void;
+  notificationSettings: NotificationSettings;
+  toggleNotificationSetting: (name: keyof NotificationSettings) => void;
+  keyboardShortcuts: KeyboardShortcut[];
   spotifyConnected: boolean;
   spotifyAccessToken: string | null;
   spotifyRefreshToken: string | null;
@@ -204,6 +223,9 @@ const buildPersistedState = (state: AppState) => ({
   spotifyAccessToken: state.spotifyAccessToken,
   spotifyRefreshToken: state.spotifyRefreshToken,
   userProfile: state.userProfile,
+  language: state.language,
+  notificationSettings: state.notificationSettings,
+  keyboardShortcuts: state.keyboardShortcuts,
   backupProfiles: state.backupProfiles,
   appMetadata: state.appMetadata,
 });
@@ -453,6 +475,27 @@ export const useAppStore = create<AppState>((set, get) => {
       });
       void persistState();
     },
+    language: 'pt-BR',
+    setLanguage: (language) => updateAndPersist(() => ({ language })),
+    notificationSettings: {
+      system: true,
+      agenda: true,
+      backup: true,
+      sound: true,
+    },
+    toggleNotificationSetting: (name) => updateAndPersist((state) => ({
+      notificationSettings: {
+        ...state.notificationSettings,
+        [name]: !state.notificationSettings[name],
+      },
+    })),
+    keyboardShortcuts: [
+      { id: 'kbd-1', action: 'Abrir Pesquisa Global', shortcut: 'Ctrl + K', description: 'Busca em todo o hub' },
+      { id: 'kbd-2', action: 'Abrir Command Palette', shortcut: 'Ctrl + P', description: 'Mostra opções rápidas' },
+      { id: 'kbd-3', action: 'Alternar Tema', shortcut: 'Ctrl + T', description: 'Muda entre claro e escuro' },
+      { id: 'kbd-4', action: 'Novo Workspace', shortcut: 'Ctrl + N', description: 'Cria um workspace rápido' },
+      { id: 'kbd-5', action: 'Nova Nota', shortcut: 'Ctrl + Shift + N', description: 'Cria uma nova nota instantaneamente' },
+    ],
     userProfile: {
       id: 'user-1',
       name: 'Gui',
@@ -508,6 +551,8 @@ export const useAppStore = create<AppState>((set, get) => {
           activePage,
           sidebarCollapsed,
           theme,
+          language,
+          notificationSettings,
           workspaces,
           shortcuts,
           notes,
@@ -522,7 +567,8 @@ export const useAppStore = create<AppState>((set, get) => {
           spotifyRefreshToken,
           userProfile,
           backupProfiles,
-          appMetadata
+          appMetadata,
+          keyboardShortcuts,
         } = storeData;
 
         set((state) => ({
@@ -530,6 +576,8 @@ export const useAppStore = create<AppState>((set, get) => {
           activePage: activePage ?? state.activePage,
           sidebarCollapsed: sidebarCollapsed ?? state.sidebarCollapsed,
           theme: theme ?? state.theme,
+          language: language ?? state.language,
+          notificationSettings: notificationSettings ?? state.notificationSettings,
           workspaces: workspaces ?? state.workspaces,
           shortcuts: shortcuts ?? state.shortcuts,
           notes: notes ?? state.notes,
@@ -546,6 +594,7 @@ export const useAppStore = create<AppState>((set, get) => {
           userProfile: userProfile ?? state.userProfile,
           backupProfiles: backupProfiles ?? state.backupProfiles,
           appMetadata: appMetadata ?? state.appMetadata,
+          keyboardShortcuts: keyboardShortcuts ?? state.keyboardShortcuts,
         }));
       }
     } catch (error) {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ArrowRight, Check, ListFilter, Search, Zap, FileText, Calendar, Heart, MessageCircle, Settings, Cpu } from 'lucide-react';
+import { ArrowRight, Check, ListFilter, Search, Zap, FileText, Calendar, Bell, Settings } from 'lucide-react';
 
 const steps = [
   {
@@ -33,21 +33,21 @@ const steps = [
     page: 'pesquisa',
   },
   {
-    icon: Cpu,
-    title: 'Monitor de hardware',
-    text: 'Aqui você encontra o estado atual do hardware do PC, como CPU, RAM e disco.',
-    page: 'home',
+    icon: Bell,
+    title: 'Notificações',
+    text: 'A aba “Notificações” mostra seus avisos e lembretes mais importantes.',
+    page: 'notificacoes',
   },
   {
     icon: Settings,
     title: 'Configurações',
-    text: 'Em “Configurações” você ajusta tema, notificações e o comportamento do app.',
+    text: 'Em “Configurações” você ajusta tema, idioma, notificações e atalhos.',
     page: 'configuracoes',
   },
   {
     icon: Check,
     title: 'Pronto para começar',
-    text: 'Agora você já sabe onde encontrar principais áreas do AnthonyHub. Use o menu para navegar e voltar quando quiser.',
+    text: 'Agora você já sabe onde encontrar as principais áreas do AnthonyHub. Use o menu para navegar quando quiser.',
     page: 'home',
   },
 ];

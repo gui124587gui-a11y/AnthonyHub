@@ -3,7 +3,20 @@ import { Settings, User, Sun, Moon, Bell, Globe, Monitor, Keyboard, RefreshCw, I
 import { useAppStore } from '../store/useAppStore';
 
 export default function Configuracoes() {
-  const { theme, toggleTheme, userProfile, updateUserProfile, appMetadata, updateAppMetadata, addHistoryItem } = useAppStore();
+  const {
+    theme,
+    toggleTheme,
+    userProfile,
+    updateUserProfile,
+    appMetadata,
+    updateAppMetadata,
+    addHistoryItem,
+    language,
+    setLanguage,
+    notificationSettings,
+    toggleNotificationSetting,
+    keyboardShortcuts,
+  } = useAppStore();
   const [activeTab, setActiveTab] = useState('conta');
   const [nameInput, setNameInput] = useState(userProfile.name);
   const [emailInput, setEmailInput] = useState(userProfile.email);
@@ -19,6 +32,11 @@ export default function Configuracoes() {
   const [isPackaged, setIsPackaged] = useState(false);
 
   useEffect(() => {
+    setNameInput(userProfile.name);
+    setEmailInput(userProfile.email);
+    setCopyrightInput(appMetadata.copyrightYear);
+    setDescriptionInput(appMetadata.description);
+
     const loadPrefs = async () => {
       if (typeof window !== 'undefined' && (window as any).electronAPI?.getUpdatePreferences) {
         const result = await (window as any).electronAPI.getUpdatePreferences();
@@ -327,21 +345,26 @@ export default function Configuracoes() {
                 <div className="space-y-6">
                   <h2 className="text-2xl font-semibold text-textPrimary mb-6">Notificações</h2>
                   <div className="space-y-4">
-                    {[
-                      { title: 'Notificações do Sistema', desc: 'Alertas sobre atualizações e manutenção' },
-                      { title: 'Lembretes de Agenda', desc: 'Notificações sobre eventos próximos' },
-                      { title: 'Backup Concluído', desc: 'Aviso quando backups forem finalizados' },
-                      { title: 'Notificações Sonoras', desc: 'Tocar som ao receber notificações' },
-                    ].map((item, index) => (
-                      <div key={index} className="flex items-center justify-between p-4 rounded-xl bg-cardHover">
+                    {(
+                      [
+                        { key: 'system', title: 'Notificações do Sistema', desc: 'Alertas sobre atualizações e manutenção' },
+                        { key: 'agenda', title: 'Lembretes de Agenda', desc: 'Notificações sobre eventos e tarefas agendadas' },
+                        { key: 'backup', title: 'Backup Concluído', desc: 'Aviso quando backups forem finalizados' },
+                        { key: 'sound', title: 'Notificações Sonoras', desc: 'Tocar som ao receber notificações' },
+                      ] as const
+                    ).map((item) => (
+                      <label key={item.key} className="flex items-center justify-between p-4 rounded-xl bg-cardHover">
                         <div>
                           <p className="font-medium text-textPrimary">{item.title}</p>
                           <p className="text-sm text-textSecondary">{item.desc}</p>
                         </div>
-                        <div className="w-12 h-6 bg-primary rounded-full relative cursor-pointer">
-                          <div className="absolute right-1 top-1 w-4 h-4 bg-white rounded-full transition-all"></div>
-                        </div>
-                      </div>
+                        <input
+                          type="checkbox"
+                          checked={notificationSettings[item.key]}
+                          onChange={() => toggleNotificationSetting(item.key)}
+                          className="h-5 w-5 rounded border-primary text-primary focus:ring-primary"
+                        />
+                      </label>
                     ))}
                   </div>
                 </div>
@@ -351,14 +374,23 @@ export default function Configuracoes() {
                 <div className="space-y-6">
                   <h2 className="text-2xl font-semibold text-textPrimary mb-6">Idioma</h2>
                   <div className="space-y-3">
-                    {['Português (Brasil)', 'English (US)', 'Español', 'Français', 'Deutsch'].map((lang, index) => (
+                    {[
+                      { value: 'pt-BR', label: 'Português (Brasil)' },
+                      { value: 'en-US', label: 'English (US)' },
+                      { value: 'es-ES', label: 'Español' },
+                      { value: 'fr-FR', label: 'Français' },
+                      { value: 'de-DE', label: 'Deutsch' },
+                    ].map((lang) => (
                       <button
-                        key={index}
-                        className={`w-full text-left p-4 rounded-xl transition-all ${
-                          index === 0 ? 'bg-primary/20 border border-primary/30' : 'bg-cardHover hover:bg-primary/10'
+                        key={lang.value}
+                        onClick={() => setLanguage(lang.value)}
+                        className={`w-full text-left p-4 rounded-xl transition-all border ${
+                          language === lang.value
+                            ? 'border-primary bg-primary/10 text-textPrimary'
+                            : 'border-transparent bg-cardHover text-textSecondary hover:bg-primary/10 hover:text-textPrimary'
                         }`}
                       >
-                        <p className="font-medium text-textPrimary">{lang}</p>
+                        <p className="font-medium">{lang.label}</p>
                       </button>
                     ))}
                   </div>
@@ -369,15 +401,12 @@ export default function Configuracoes() {
                 <div className="space-y-6">
                   <h2 className="text-2xl font-semibold text-textPrimary mb-6">Atalhos de Teclado</h2>
                   <div className="space-y-4">
-                    {[
-                      { action: 'Abrir Pesquisa Global', shortcut: 'Ctrl + K' },
-                      { action: 'Abrir Command Palette', shortcut: 'Ctrl + P' },
-                      { action: 'Alternar Tema', shortcut: 'Ctrl + T' },
-                      { action: 'Novo Workspace', shortcut: 'Ctrl + N' },
-                      { action: 'Nova Nota', shortcut: 'Ctrl + Shift + N' },
-                    ].map((item, index) => (
-                      <div key={index} className="flex items-center justify-between p-4 rounded-xl bg-cardHover">
-                        <p className="font-medium text-textPrimary">{item.action}</p>
+                    {keyboardShortcuts.map((item) => (
+                      <div key={item.id} className="flex items-center justify-between p-4 rounded-xl bg-cardHover">
+                        <div>
+                          <p className="font-medium text-textPrimary">{item.action}</p>
+                          <p className="text-sm text-textSecondary">{item.description}</p>
+                        </div>
                         <kbd className="px-4 py-2 rounded-lg bg-primary/20 text-primary font-mono text-sm">{item.shortcut}</kbd>
                       </div>
                     ))}

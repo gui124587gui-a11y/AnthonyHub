@@ -24,7 +24,7 @@ import { useAppStore } from '@/store/useAppStore';
 import useAgendaAlarms from '@/hooks/useAgendaAlarms';
 
 export default function App() {
-  const { activePage, setActivePage } = useAppStore();
+  const { activePage, setActivePage, theme } = useAppStore();
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   // register agenda alarms globally
@@ -33,6 +33,11 @@ export default function App() {
   useEffect(() => {
     setShowOnboarding(localStorage.getItem('anthonyhub-onboarding-complete') !== 'true');
   }, []);
+
+  useEffect(() => {
+    document.documentElement.classList.remove('light', 'dark');
+    document.documentElement.classList.add(theme);
+  }, [theme]);
 
   const finishOnboarding = () => {
     localStorage.setItem('anthonyhub-onboarding-complete', 'true');
