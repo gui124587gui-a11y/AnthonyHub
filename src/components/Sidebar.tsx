@@ -23,29 +23,30 @@ import {
 } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
 import { cn } from '@/lib/utils';
+import { translate } from '@/lib/i18n';
 
 const navItems = [
-  { id: 'home', icon: Home, label: 'Início' },
-  { id: 'workspaces', icon: Layers, label: 'Workspaces' },
-  { id: 'atalhos', icon: Zap, label: 'Atalhos' },
-  { id: 'biblioteca', icon: BookOpen, label: 'Biblioteca' },
-  { id: 'favoritos', icon: Star, label: 'Favoritos' },
-  { id: 'pesquisa', icon: Search, label: 'Pesquisa' },
-  { id: 'backup', icon: HardDrive, label: 'Backup' },
-  { id: 'processos', icon: ListFilter, label: 'Processos pesados' },
-  { id: 'chatbot', icon: Bot, label: 'Chatbot AI' },
-  { id: 'notas', icon: FileText, label: 'Notas' },
-  { id: 'agenda', icon: Calendar, label: 'Agenda' },
-  { id: 'links', icon: Link, label: 'Links' },
-  { id: 'musica', icon: Music, label: 'Música' },
-  { id: 'installer', icon: Sparkles, label: 'Instalador Mágico' },
-  { id: 'uninstaller', icon: Trash2, label: 'Desinstalador' },
-  { id: 'historico', icon: History, label: 'Histórico' },
-  { id: 'configuracoes', icon: Settings, label: 'Configurações' },
+  { id: 'home', icon: Home, label: 'sidebar.home' },
+  { id: 'workspaces', icon: Layers, label: 'sidebar.workspaces' },
+  { id: 'atalhos', icon: Zap, label: 'sidebar.shortcuts' },
+  { id: 'biblioteca', icon: BookOpen, label: 'sidebar.library' },
+  { id: 'favoritos', icon: Star, label: 'sidebar.favorites' },
+  { id: 'pesquisa', icon: Search, label: 'sidebar.search' },
+  { id: 'backup', icon: HardDrive, label: 'sidebar.backup' },
+  { id: 'processos', icon: ListFilter, label: 'sidebar.processes' },
+  { id: 'chatbot', icon: Bot, label: 'sidebar.chatbot' },
+  { id: 'notas', icon: FileText, label: 'sidebar.notes' },
+  { id: 'agenda', icon: Calendar, label: 'sidebar.agenda' },
+  { id: 'links', icon: Link, label: 'sidebar.links' },
+  { id: 'musica', icon: Music, label: 'sidebar.music' },
+  { id: 'installer', icon: Sparkles, label: 'sidebar.installer' },
+  { id: 'uninstaller', icon: Trash2, label: 'sidebar.uninstaller' },
+  { id: 'historico', icon: History, label: 'sidebar.history' },
+  { id: 'configuracoes', icon: Settings, label: 'sidebar.settings' },
 ];
 
 export default function Sidebar() {
-  const { activePage, setActivePage, sidebarCollapsed, toggleSidebar } = useAppStore();
+  const { activePage, setActivePage, sidebarCollapsed, toggleSidebar, language } = useAppStore();
 
   return (
     <div className={cn(
@@ -86,10 +87,10 @@ export default function Sidebar() {
                 ? "bg-primary/20 text-primary border border-primary/30"
                 : "text-textSecondary hover:bg-cardHover hover:text-textPrimary"
             )}
-            title={sidebarCollapsed ? item.label : undefined}
+            title={sidebarCollapsed ? translate(language, item.label) : undefined}
           >
             <item.icon size={20} />
-            {!sidebarCollapsed && <span className="font-medium">{item.label}</span>}
+            {!sidebarCollapsed && <span className="font-medium">{translate(language, item.label)}</span>}
           </button>
         ))}
       </nav>

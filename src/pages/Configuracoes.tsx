@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Settings, User, Sun, Moon, Bell, Globe, Monitor, Keyboard, RefreshCw, Info, CheckCircle2 } from 'lucide-react';
 import { useAppStore } from '../store/useAppStore';
+import { translate } from '../lib/i18n';
+import type { Locale } from '../lib/i18n';
 
 export default function Configuracoes() {
   const {
@@ -17,7 +19,7 @@ export default function Configuracoes() {
     toggleNotificationSetting,
     keyboardShortcuts,
   } = useAppStore();
-  const [activeTab, setActiveTab] = useState('conta');
+  const [activeTab, setActiveTab] = useState('account');
   const [nameInput, setNameInput] = useState(userProfile.name);
   const [emailInput, setEmailInput] = useState(userProfile.email);
   const [copyrightInput, setCopyrightInput] = useState(appMetadata.copyrightYear);
@@ -179,13 +181,13 @@ export default function Configuracoes() {
   };
 
   const tabs = [
-    { id: 'conta', label: 'Conta', icon: User },
-    { id: 'tema', label: 'Tema', icon: Monitor },
-    { id: 'notificacoes', label: 'Notificações', icon: Bell },
-    { id: 'idioma', label: 'Idioma', icon: Globe },
-    { id: 'atalhos', label: 'Atalhos', icon: Keyboard },
-    { id: 'atualizacoes', label: 'Atualizações', icon: RefreshCw },
-    { id: 'sobre', label: 'Sobre', icon: Info },
+    { id: 'account', label: 'Conta', icon: User },
+    { id: 'theme', label: 'Tema', icon: Monitor },
+    { id: 'notifications', label: 'Notificações', icon: Bell },
+    { id: 'language', label: 'Idioma', icon: Globe },
+    { id: 'shortcuts', label: 'Atalhos', icon: Keyboard },
+    { id: 'updates', label: 'Atualizações', icon: RefreshCw },
+    { id: 'about', label: 'Sobre', icon: Info },
   ];
 
   return (
@@ -193,7 +195,7 @@ export default function Configuracoes() {
       <div className="max-w-5xl mx-auto">
         <h1 className="text-3xl font-bold text-textPrimary mb-8 flex items-center gap-3">
           <Settings size={32} />
-          Configurações
+          {translate(language, 'settings.title')}
         </h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -212,7 +214,7 @@ export default function Configuracoes() {
                     }`}
                   >
                     <Icon size={20} />
-                    <span className="font-medium">{tab.label}</span>
+                    <span className="font-medium">{translate(language, `settings.tabs.${tab.id}` as any)}</span>
                   </button>
                 );
               })}
@@ -221,28 +223,42 @@ export default function Configuracoes() {
 
           <div className="lg:col-span-3">
             <div className="glass rounded-2xl p-8">
-              {activeTab === 'conta' && (
+              {activeTab === 'account' && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-semibold text-textPrimary mb-6">Conta</h2>
-              <div className="flex items-center gap-6 mb-8">
-                <div 
-                  className="w-24 h-24 rounded-full flex items-center justify-center"
-                  style={{ 
-                    background: `linear-gradient(135deg, ${userProfile.avatarColor}, #8B5CF6)` 
-                  }}
-                >
-                  <span className="text-3xl font-bold text-white">
-                    {userProfile.name.charAt(0).toUpperCase()}
-                  </span>
+              <h2 className="text-2xl font-semibold text-textPrimary mb-6">{translate(language, 'settings.profile.title')}</h2>
+              <div className="flex flex-col md:flex-row items-center gap-6 mb-8">
+                <div className="relative w-24 h-24 rounded-full overflow-hidden bg-cardHover border border-primary/20">
+                  {userProfile.avatarUrl ? (
+                    <img src={userProfile.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-700 to-slate-900 text-white">
+                      <span className="text-3xl font-bold text-white">{userProfile.name ? userProfile.name.charAt(0).toUpperCase() : '?'}</span>
+                    </div>
+                  )}
+                  <label className="absolute inset-x-0 bottom-0 mx-auto mb-1 flex cursor-pointer items-center justify-center rounded-full bg-black/60 px-3 py-1 text-xs text-white transition hover:bg-black/80">
+                    Alterar Foto
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          const url = URL.createObjectURL(file);
+                          updateUserProfile({ avatarUrl: url });
+                        }
+                      }}
+                    />
+                  </label>
                 </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-textPrimary">{userProfile.name}</h3>
-                  <p className="text-textSecondary">{userProfile.email}</p>
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-xl font-semibold text-textPrimary">{userProfile.name || 'Sem nome'}</h3>
+                  <p className="text-textSecondary">{userProfile.email || 'Sem e-mail'}</p>
                 </div>
               </div>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-textSecondary mb-2">Nome</label>
+                  <label className="block text-sm font-medium text-textSecondary mb-2">{translate(language, 'settings.profile.name')}</label>
                   <input
                     type="text"
                     value={nameInput}
@@ -251,7 +267,7 @@ export default function Configuracoes() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-textSecondary mb-2">E-mail</label>
+                  <label className="block text-sm font-medium text-textSecondary mb-2">{translate(language, 'settings.profile.email')}</label>
                   <input
                     type="email"
                     value={emailInput}
@@ -271,14 +287,14 @@ export default function Configuracoes() {
                 }}
                 className="mt-6 px-6 py-3 bg-primary hover:bg-primary/90 rounded-xl transition-all text-white font-medium"
               >
-                Salvar Alterações
+                {translate(language, 'settings.profile.save')}
               </button>
             </div>
           )}
 
-              {activeTab === 'tema' && (
+              {activeTab === 'theme' && (
                 <div className="space-y-6">
-                  <h2 className="text-2xl font-semibold text-textPrimary mb-6">Tema</h2>
+                  <h2 className="text-2xl font-semibold text-textPrimary mb-6">{translate(language, 'settings.theme.title')}</h2>
                   <div className="grid grid-cols-2 gap-4 mb-8">
                     <button
                       onClick={() => theme !== 'dark' && toggleTheme()}
@@ -291,7 +307,7 @@ export default function Configuracoes() {
                       <div className="w-full h-24 bg-gradient-to-br from-slate-900 to-slate-800 rounded-xl mb-3 flex items-center justify-center">
                         <Moon size={32} className="text-primary" />
                       </div>
-                      <p className="font-medium text-textPrimary">Escuro</p>
+                      <p className="font-medium text-textPrimary">{translate(language, 'settings.theme.dark')}</p>
                     </button>
                     <button
                       onClick={() => theme !== 'light' && toggleTheme()}
@@ -304,7 +320,7 @@ export default function Configuracoes() {
                       <div className="w-full h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl mb-3 flex items-center justify-center">
                         <Sun size={32} className="text-primary" />
                       </div>
-                      <p className="font-medium text-textPrimary">Claro</p>
+                      <p className="font-medium text-textPrimary">{translate(language, 'settings.theme.light')}</p>
                     </button>
                   </div>
                   <div className="space-y-4">
@@ -329,21 +345,21 @@ export default function Configuracoes() {
                   </div>
                   
                   <div className="pt-8 border-t border-cardHover mt-8">
-                    <h3 className="text-lg font-semibold text-textPrimary mb-4">Danger Zone</h3>
+                    <h3 className="text-lg font-semibold text-textPrimary mb-4">{translate(language, 'settings.dangerZone.title')}</h3>
                     <button
                       onClick={handleClearStore}
                       className="w-full py-3 px-6 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-xl transition-all flex items-center justify-center gap-2"
                     >
                       <RefreshCw size={18} />
-                      Limpar Todos os Dados e Resetar
+                      {translate(language, 'settings.dangerZone.clear')}
                     </button>
                   </div>
                 </div>
               )}
 
-              {activeTab === 'notificacoes' && (
+              {activeTab === 'notifications' && (
                 <div className="space-y-6">
-                  <h2 className="text-2xl font-semibold text-textPrimary mb-6">Notificações</h2>
+                  <h2 className="text-2xl font-semibold text-textPrimary mb-6">{translate(language, 'settings.notifications.title')}</h2>
                   <div className="space-y-4">
                     {(
                       [
@@ -352,35 +368,40 @@ export default function Configuracoes() {
                         { key: 'backup', title: 'Backup Concluído', desc: 'Aviso quando backups forem finalizados' },
                         { key: 'sound', title: 'Notificações Sonoras', desc: 'Tocar som ao receber notificações' },
                       ] as const
-                    ).map((item) => (
-                      <label key={item.key} className="flex items-center justify-between p-4 rounded-xl bg-cardHover">
-                        <div>
-                          <p className="font-medium text-textPrimary">{item.title}</p>
-                          <p className="text-sm text-textSecondary">{item.desc}</p>
-                        </div>
-                        <input
-                          type="checkbox"
-                          checked={notificationSettings[item.key]}
-                          onChange={() => toggleNotificationSetting(item.key)}
-                          className="h-5 w-5 rounded border-primary text-primary focus:ring-primary"
-                        />
-                      </label>
-                    ))}
+                    ).map((item) => {
+                      const enabled = notificationSettings[item.key];
+                      return (
+                        <button
+                          key={item.key}
+                          type="button"
+                          onClick={() => toggleNotificationSetting(item.key)}
+                          className={`w-full flex items-center justify-between p-4 rounded-xl transition-all ${enabled ? 'bg-primary/15 border border-primary' : 'bg-cardHover border border-transparent hover:border-primary/30'}`}
+                        >
+                          <div>
+                            <p className="font-medium text-textPrimary">{item.title}</p>
+                            <p className="text-sm text-textSecondary">{item.desc}</p>
+                          </div>
+                          <span className={`inline-flex h-8 w-16 items-center rounded-full p-1 transition-colors ${enabled ? 'bg-primary' : 'bg-white/10'}`}>
+                            <span className={`h-6 w-6 rounded-full bg-white transition-transform ${enabled ? 'translate-x-8' : 'translate-x-0'}`} />
+                          </span>
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               )}
 
-              {activeTab === 'idioma' && (
+              {activeTab === 'language' && (
                 <div className="space-y-6">
-                  <h2 className="text-2xl font-semibold text-textPrimary mb-6">Idioma</h2>
+                  <h2 className="text-2xl font-semibold text-textPrimary mb-6">{translate(language, 'settings.language.title')}</h2>
                   <div className="space-y-3">
-                    {[
-                      { value: 'pt-BR', label: 'Português (Brasil)' },
-                      { value: 'en-US', label: 'English (US)' },
-                      { value: 'es-ES', label: 'Español' },
-                      { value: 'fr-FR', label: 'Français' },
-                      { value: 'de-DE', label: 'Deutsch' },
-                    ].map((lang) => (
+                    {([
+                      { value: 'pt-BR' as Locale, label: 'Português (Brasil)' },
+                      { value: 'en-US' as Locale, label: 'English (US)' },
+                      { value: 'es-ES' as Locale, label: 'Español' },
+                      { value: 'fr-FR' as Locale, label: 'Français' },
+                      { value: 'de-DE' as Locale, label: 'Deutsch' },
+                    ] as const).map((lang) => (
                       <button
                         key={lang.value}
                         onClick={() => setLanguage(lang.value)}
@@ -397,9 +418,9 @@ export default function Configuracoes() {
                 </div>
               )}
 
-              {activeTab === 'atalhos' && (
+              {activeTab === 'shortcuts' && (
                 <div className="space-y-6">
-                  <h2 className="text-2xl font-semibold text-textPrimary mb-6">Atalhos de Teclado</h2>
+                  <h2 className="text-2xl font-semibold text-textPrimary mb-6">{translate(language, 'settings.shortcuts.title')}</h2>
                   <div className="space-y-4">
                     {keyboardShortcuts.map((item) => (
                       <div key={item.id} className="flex items-center justify-between p-4 rounded-xl bg-cardHover">
@@ -414,9 +435,9 @@ export default function Configuracoes() {
                 </div>
               )}
 
-              {activeTab === 'atualizacoes' && (
+              {activeTab === 'updates' && (
                 <div className="space-y-6">
-                  <h2 className="text-2xl font-semibold text-textPrimary mb-6">Atualizações</h2>
+                  <h2 className="text-2xl font-semibold text-textPrimary mb-6">{translate(language, 'settings.updates.title')}</h2>
                   <div className="space-y-6">
                     <div className="flex flex-col gap-4 p-6 rounded-3xl bg-cardHover">
                       <div className="flex flex-col gap-2">
@@ -440,13 +461,13 @@ export default function Configuracoes() {
                             onChange={handleToggleAutoDownload}
                             className="h-4 w-4 rounded border-primary text-primary focus:ring-primary"
                           />
-                          Baixar automaticamente
+                          {translate(language, 'settings.updates.autoDownload')}
                         </label>
                       </div>
 
                       <div className="rounded-2xl border border-primary/10 bg-slate-950/40 p-4">
                         <p className="text-sm text-textSecondary">Status da atualização</p>
-                        <p className="mt-2 text-textPrimary font-medium">{updateMessage || 'Nenhuma ação iniciada.'}</p>
+                        <p className="mt-2 text-textPrimary font-medium">{updateMessage || translate(language, 'settings.updates.noUpdate')}</p>
                         {downloadProgress !== null && (
                           <div className="mt-3 h-3 rounded-full bg-primary/10 overflow-hidden">
                             <div
@@ -503,7 +524,7 @@ export default function Configuracoes() {
                 </div>
               )}
 
-              {activeTab === 'sobre' && (
+              {activeTab === 'about' && (
                 <div className="space-y-6 text-center">
                   <div className="p-8">
                     <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center mx-auto mb-6">

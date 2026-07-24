@@ -42,6 +42,7 @@ export default function App() {
   const finishOnboarding = () => {
     localStorage.setItem('anthonyhub-onboarding-complete', 'true');
     setShowOnboarding(false);
+    setActivePage('configuracoes');
   };
 
   return (

@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import type { Locale } from '@/lib/i18n';
 
 export interface WorkspaceItem {
   id: string;
@@ -122,8 +123,7 @@ interface UserProfile {
   id: string;
   name: string;
   email: string;
-  avatarColor: string;
-}
+  avatarColor: string;  avatarUrl?: string;}
 
 interface BackupProfile {
   id: string;
@@ -180,8 +180,8 @@ interface AppState {
   addHistoryItem: (item: Omit<HistoryItem, 'id' | 'timestamp'>) => void;
   removeHistoryItem: (id: string) => void;
   clearHistory: () => void;
-  language: string;
-  setLanguage: (language: string) => void;
+  language: Locale;
+  setLanguage: (language: Locale) => void;
   notificationSettings: NotificationSettings;
   toggleNotificationSetting: (name: keyof NotificationSettings) => void;
   keyboardShortcuts: KeyboardShortcut[];
@@ -498,9 +498,10 @@ export const useAppStore = create<AppState>((set, get) => {
     ],
     userProfile: {
       id: 'user-1',
-      name: 'Gui',
-      email: 'gui@email.com',
-      avatarColor: '#3B82F6',
+      name: '',
+      email: '',
+      avatarColor: '#475569',
+      avatarUrl: undefined,
     },
     updateUserProfile: (profile) => updateAndPersist((state) => ({
       userProfile: { ...state.userProfile, ...profile },

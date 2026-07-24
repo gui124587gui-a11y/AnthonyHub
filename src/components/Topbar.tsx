@@ -1,6 +1,7 @@
 import React from 'react';
 import { Bell, Settings, Search, Minus, Square, X } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
+import { translate } from '@/lib/i18n';
 
 export default function Topbar() {
   const handleMinimize = () => {
@@ -15,7 +16,7 @@ export default function Topbar() {
     }
   };
 
-  const { searchQuery, setSearchQuery, setActivePage } = useAppStore();
+  const { searchQuery, setSearchQuery, setActivePage, language } = useAppStore();
 
   const handleClose = () => {
     if (typeof window !== 'undefined' && (window as any).electronAPI) {
@@ -45,7 +46,7 @@ export default function Topbar() {
         <div className="relative" style={{ WebkitAppRegion: "no-drag" } as any}>
           <input
             type="text"
-            placeholder="Pesquisar (Ctrl + K)"
+            placeholder={translate(language, 'topbar.searchPlaceholder')}
             value={searchQuery}
             onChange={(e) => handleSearchInput(e.target.value)}
             onKeyDown={handleSearchKeyDown}
