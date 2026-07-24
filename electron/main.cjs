@@ -6,13 +6,13 @@ const si = require('systeminformation');
 const { autoUpdater } = require('electron-updater');
 const log = require('electron-log');
 
-app.setAppUserModelId('com.guihub.app');
+app.setAppUserModelId('com.anthonyhub.app');
 
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
 
 // Create electron-store instance for persisting small app state (spotify tokens, prefs)
-const store = new Store({ name: 'guihub' });
+const store = new Store({ name: 'anthonyhub' });
 console.log('electron-store initialized');
 const fs = require('fs');
 const https = require('https');
@@ -166,7 +166,7 @@ const startInstallation = async (softwareName, sendStatus) => {
 
     // Step 2: Download file
     sendStatus({ step: 2, totalSteps: 6, text: 'Baixando instalador...', status: 'in-progress' });
-    const tempDir = path.join(app.getPath('temp'), 'GuiHubInstaller');
+    const tempDir = path.join(app.getPath('temp'), 'AnthonyHubInstaller');
     if (!fs.existsSync(tempDir)) {
       fs.mkdirSync(tempDir, { recursive: true });
     }
@@ -278,7 +278,7 @@ let tray = null;
 // Create tray icon
 function createTray() {
   // Prefer the packaged ICO icon on Windows for tray visibility
-  const iconPath = path.join(__dirname, '../build/icon.ico');
+  const iconPath = path.join(__dirname, '../build/icon-AnthonyHub.ico');
   let trayIcon;
 
   try {
@@ -303,12 +303,12 @@ function createTray() {
   tray = new Tray(trayIcon);
   
   const contextMenu = Menu.buildFromTemplate([
-    { label: 'Abrir GuiHub', click: () => { if (mainWindow) mainWindow.show(); } },
+    { label: 'Abrir AnthonyHub', click: () => { if (mainWindow) mainWindow.show(); } },
     { type: 'separator' },
     { label: 'Sair', click: () => { app.isQuitting = true; app.quit(); } }
   ]);
   
-  tray.setToolTip('GuiHub');
+  tray.setToolTip('AnthonyHub');
   tray.setContextMenu(contextMenu);
   
   // Show/hide main window when clicking tray icon
@@ -325,7 +325,7 @@ function createTray() {
 
 // Spotify config
 const SPOTIFY_CLIENT_ID = process.env.SPOTIFY_CLIENT_ID || 'c7162dab98194a30a7ea9ba933b36e5';
-const SPOTIFY_REDIRECT_URI = 'guihub://spotify-callback';
+const SPOTIFY_REDIRECT_URI = 'anthonyhub://spotify-callback';
 const SPOTIFY_SCOPES = [
   'user-read-private',
   'user-read-email',
@@ -577,8 +577,8 @@ async function refreshSpotifyToken() {
 app.on('ready', () => {
   setupAutoUpdater();
 
-  // Registrar protocolo customizado guihub://
-  protocol.registerFileProtocol('guihub', (request, callback) => {
+  // Registrar protocolo customizado anthonyhub://
+  protocol.registerFileProtocol('anthonyhub', (request, callback) => {
     // Vamos tratar o callback aqui
     const url = new URL(request.url);
     if (url.hostname === 'spotify-callback') {
@@ -606,7 +606,7 @@ app.on('ready', () => {
   createTray();
 });
 
-app.setAsDefaultProtocolClient('guihub');
+app.setAsDefaultProtocolClient('anthonyhub');
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

@@ -25,7 +25,7 @@ import { useAppStore } from '@/store/useAppStore';
 import useAgendaAlarms from '@/hooks/useAgendaAlarms';
 
 export default function App() {
-  const { activePage } = useAppStore();
+  const { activePage, setActivePage } = useAppStore();
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   // register agenda alarms globally
@@ -67,7 +67,7 @@ export default function App() {
           {activePage === 'uninstaller' && <UninstallerMagic />}
         </main>
       </div>
-      {showOnboarding && <Onboarding onFinish={finishOnboarding} />}
+      {showOnboarding && <Onboarding onFinish={finishOnboarding} setActivePage={setActivePage} />}
     </div>
   );
 }

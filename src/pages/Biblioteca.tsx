@@ -95,7 +95,7 @@ export default function Biblioteca() {
           </div>
           <h2 className="text-2xl font-bold text-textPrimary mb-4">Detectando Aplicativos...</h2>
           <p className="text-textSecondary mb-8 max-w-md mx-auto">
-            O GuiHub está procurando por aplicativos instalados no seu computador
+            O AnthonyHub está procurando por aplicativos instalados no seu computador
           </p>
         </div>
       ) : (

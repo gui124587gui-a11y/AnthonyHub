@@ -155,7 +155,7 @@ export default function Musica() {
             </div>
             <h2 className="text-2xl font-bold text-textPrimary mb-4">Conectar ao Spotify</h2>
             <p className="text-textSecondary mb-8 max-w-md mx-auto">
-              Conecte sua conta Spotify para controlar a reprodução diretamente do GuiHub
+              Conecte sua conta Spotify para controlar a reprodução diretamente do AnthonyHub
             </p>
             <button
               onClick={handleLogin}

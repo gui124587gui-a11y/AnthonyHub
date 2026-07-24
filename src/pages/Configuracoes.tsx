@@ -481,7 +481,7 @@ export default function Configuracoes() {
                       <span className="text-4xl font-bold text-white">GH</span>
                     </div>
                     <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-2">
-                      GuiHub
+                      AnthonyHub
                     </h2>
                     <p className="text-textSecondary mb-6">Versão {appVersion}{appBuild ? ` (build ${appBuild})` : ''}</p>
                     <p className="text-textSecondary mb-8 max-w-md mx-auto">
@@ -498,7 +498,7 @@ export default function Configuracoes() {
                   </div>
                   <div className="pt-8 border-t border-primary/10">
                     <p className="text-sm text-textSecondary">
-                      © {appMetadata.copyrightYear} GuiHub. Todos os direitos reservados.
+                      © {appMetadata.copyrightYear} AnthonyHub. Todos os direitos reservados.
                     </p>
                   </div>
                 </div>

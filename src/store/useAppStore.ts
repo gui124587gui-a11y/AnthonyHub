@@ -184,7 +184,7 @@ interface AppState {
 const nowPtBr = () => new Date().toLocaleString('pt-BR');
 const todayIso = () => new Date().toISOString().split('T')[0];
 
-const STORAGE_KEY = 'guihub-app-state-v1';
+const STORAGE_KEY = 'anthonyhub-app-state-v1';
 
 const buildPersistedState = (state: AppState) => ({
   activePage: state.activePage,
